@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YADR — System Monitor</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%2329b56b'/><text x='8' y='12' text-anchor='middle' font-family='monospace' font-size='10' fill='%230b0f14'>Y</text></svg>" />
+    <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+    <header id="topbar">
+        <div class="brand">YADR</div>
+        <div id="host-info" class="host-info"></div>
+        <div id="conn-status" class="conn-status" data-state="connecting">connecting…</div>
+    </header>
+
+    <main class="dashboard">
+        <section class="panel" id="panel-cpu">
+            <h2>CPU</h2>
+            <div id="cpu-summary" class="metric-row"></div>
+            <div id="cpu-cores" class="cpu-cores"></div>
+            <div id="cpu-chart" class="chart"></div>
+        </section>
+
+        <section class="panel" id="panel-memory">
+            <h2>Memory</h2>
+            <div id="memory-bars"></div>
+            <div id="memory-chart" class="chart"></div>
+        </section>
+
+        <section class="panel" id="panel-network">
+            <h2>Network</h2>
+            <div id="network-ifaces" class="iface-list"></div>
+            <div id="network-chart" class="chart"></div>
+        </section>
+
+        <section class="panel" id="panel-disk">
+            <h2>Disk I/O</h2>
+            <div id="disk-devices" class="iface-list"></div>
+            <div id="disk-chart" class="chart"></div>
+        </section>
+
+        <section class="panel panel-wide" id="panel-processes">
+            <h2>Processes</h2>
+            <div class="proc-controls">
+                <input id="proc-filter" type="search" placeholder="filter (name, pid, user…)" />
+                <span id="proc-count" class="hint"></span>
+            </div>
+            <div class="proc-table-wrap">
+                <table id="proc-table">
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

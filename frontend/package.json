@@ -1,0 +1,19 @@
+{
+  "name": "yadr-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "WebUI for yadr (Yet Another Desktop Resource monitor).",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
+  },
+  "dependencies": {
+    "uplot": "^1.6.30"
+  }
+}

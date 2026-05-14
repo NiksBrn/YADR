@@ -1,0 +1,199 @@
+/* YADR — dark dashboard. htop-inspired palette, monospaced data, CSS-grid layout. */
+
+:root {
+    --bg:          #0b0f14;
+    --bg-panel:    #131923;
+    --bg-elev:    #1a2230;
+    --line:        #233040;
+    --fg:          #d4dae3;
+    --fg-dim:      #8c96a3;
+    --accent:      #29b56b;   /* user CPU */
+    --warn:        #e5a13a;   /* nice / iowait */
+    --danger:      #e25b5b;   /* system */
+    --info:        #5aa9e0;   /* IO / network */
+    --purple:      #a779e0;   /* swap */
+    --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    min-height: 100vh;
+}
+
+#topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 20px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.brand { font-weight: 700; letter-spacing: 0.1em; color: var(--accent); }
+.host-info { font-family: var(--mono); color: var(--fg-dim); flex: 1; font-size: 12px; }
+.host-info b { color: var(--fg); font-weight: 600; }
+.conn-status {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--bg-elev);
+}
+.conn-status[data-state="open"]        { color: var(--accent); }
+.conn-status[data-state="connecting"]  { color: var(--warn); }
+.conn-status[data-state="closed"]      { color: var(--danger); }
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 14px;
+    padding: 14px;
+}
+
+.panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.panel h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+}
+.panel-wide { grid-column: 1 / -1; }
+
+.metric-row { display: flex; gap: 16px; flex-wrap: wrap; font-family: var(--mono); }
+.metric-row .num { font-size: 18px; font-weight: 600; }
+.metric-row .lbl { color: var(--fg-dim); font-size: 11px; text-transform: uppercase; }
+
+/* CPU per-core bars */
+.cpu-cores {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 4px 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+}
+.cpu-core { display: grid; grid-template-columns: 28px 1fr 38px; gap: 6px; align-items: center; }
+.cpu-core .name { color: var(--fg-dim); }
+.cpu-core .pct  { text-align: right; }
+.bar {
+    height: 8px;
+    background: var(--bg-elev);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+.bar > .fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 200ms ease-out;
+}
+.bar > .fill.warn { background: var(--warn); }
+.bar > .fill.hot  { background: var(--danger); }
+
+/* Memory bars */
+#memory-bars { display: grid; gap: 8px; font-family: var(--mono); font-size: 12px; }
+.mem-row { display: grid; grid-template-columns: 60px 1fr 160px; gap: 8px; align-items: center; }
+.mem-row .name { color: var(--fg-dim); }
+.mem-row .nums { text-align: right; }
+
+/* Interface / disk lists */
+.iface-list {
+    display: grid;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 12px;
+}
+.iface-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+    align-items: baseline;
+}
+.iface-row .name { color: var(--fg); font-weight: 600; }
+.iface-row .rx { color: var(--info); }
+.iface-row .tx { color: var(--purple); }
+.iface-row .rd { color: var(--info); }
+.iface-row .wr { color: var(--warn); }
+
+.chart { width: 100%; height: 110px; }
+
+/* Process table */
+.proc-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+#proc-filter {
+    flex: 1;
+    max-width: 320px;
+    background: var(--bg-elev);
+    color: var(--fg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+}
+#proc-filter:focus { outline: none; border-color: var(--accent); }
+.hint { color: var(--fg-dim); font-family: var(--mono); font-size: 11px; }
+
+.proc-table-wrap {
+    max-height: 480px;
+    overflow: auto;
+    border-top: 1px solid var(--line);
+}
+#proc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    table-layout: fixed;
+}
+#proc-table th, #proc-table td {
+    padding: 4px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--bg-elev);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#proc-table th {
+    position: sticky;
+    top: 0;
+    background: var(--bg-panel);
+    color: var(--fg-dim);
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+#proc-table th:hover { color: var(--fg); }
+#proc-table th.sort-asc::after  { content: " ▲"; color: var(--accent); }
+#proc-table th.sort-desc::after { content: " ▼"; color: var(--accent); }
+#proc-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+#proc-table tr:hover td { background: var(--bg-elev); }
+
+/* uPlot dark overrides */
+.uplot { font-family: var(--mono); }
+.uplot .u-legend { color: var(--fg-dim); font-size: 11px; }
+.uplot .u-axis { color: var(--fg-dim); }
