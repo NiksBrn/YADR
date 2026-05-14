@@ -54,7 +54,7 @@ sudo apt install -y nodejs
 ## Архитектура
 
 ![alt text](docs/architecture.png)
-```
+
 
 Всё работает в одном процессе: семплер собирает метрики из `/proc`, строит снимок и рассылает его всем WebSocket-клиентам. Тот же процесс раздаёт статику SPA. Итог -- один бинарник плюс директория `web/`, без демонов и прокси.
 
@@ -78,7 +78,7 @@ sudo apt install -y nodejs
 
 ## Структура проекта
 
-
+```
 .
 ├── backend/                C++ сервер
 │   ├── include/yadr/       публичные заголовки (Snapshot, коллекторы, сервер)
@@ -98,7 +98,7 @@ sudo apt install -y nodejs
 ├── scripts/                build.sh, run.sh
 ├── CMakeLists.txt          верхний уровень (бэкенд + фронтенд)
 └── README.md
-
+```
 
 ---
 
