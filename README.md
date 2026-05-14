@@ -99,13 +99,3 @@ sudo apt install -y nodejs
 ├── CMakeLists.txt          верхний уровень (бэкенд + фронтенд)
 └── README.md
 ```
-
----
-
-## Сборка
-
-- **Бэкенд**: CMake 3.20+, C++20, GCC 11+ (дефолт Ubuntu 22.04). Зависимости подтягиваются через `FetchContent`: Crow `v1.2.0`, nlohmann/json `v3.11.3`, GoogleTest `v1.14.0`. Из системных пакетов нужен только `libasio-dev`.
-- **Фронтенд**: Vite + TypeScript + uPlot (~50 КБ gzip). При `cmake --build` вызывает `npm install && npm run build`, результат копируется в `build/web/`.
-- **Флаги CMake**:
-  - `-DYADR_BUILD_TESTS=OFF` -- отключить GoogleTest и тесты.
-  - `-DYADR_BUILD_FRONTEND=OFF` -- отключить npm-шаг (нет Node.js на хосте).
